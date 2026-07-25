@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Install Zsh
+        run: sudo apt-get update && sudo apt-get install -y zsh
       - name: Validate tag
         run: test "$GITHUB_REF_NAME" = v1.0.0
       - name: Build deterministic assets
