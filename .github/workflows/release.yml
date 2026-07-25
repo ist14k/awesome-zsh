@@ -1,0 +1,23 @@
+name: release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate tag
+        run: test "$GITHUB_REF_NAME" = v1.0.0
+      - name: Build deterministic assets
+        run: zsh scripts/build-release.zsh 1.0.0
+      - name: Verify checksums
+        run: cd dist && sha256sum -c SHA256SUMS
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/awesome-zsh-v1.0.0.tar.gz
+            dist/install.zsh
+            dist/SHA256SUMS

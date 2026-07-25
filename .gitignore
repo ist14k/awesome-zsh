@@ -1,0 +1,25 @@
+# Release products and test output
+/dist/
+/build/
+/*.tar.gz
+/SHA256SUMS
+/tests/tmp/
+
+# Machine-local configuration and runtime state
+local.zsh
+**/local.zsh
+.zsh_history
+**/.zsh_history
+.cache/
+.local/share/atuin/
+.local/state/
+
+# Credentials and editor/OS debris
+.env
+.env.*
+*.key
+*.pem
+*.swp
+*~
+.DS_Store
+

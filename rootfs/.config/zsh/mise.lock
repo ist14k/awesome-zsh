@@ -1,0 +1,4 @@
+# Awesome Zsh tool resolution lock (human-readable; mise.toml is authoritative)
+starship = "1.22.1"
+atuin = "18.6.1"
+fzf = "0.60.3"

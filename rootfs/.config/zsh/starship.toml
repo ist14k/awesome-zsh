@@ -1,0 +1,106 @@
+# Catppuccin Mocha: a compact two-line prompt with transient command context.
+format = """
+[](mauve)\
+$os\
+$username\
+[](bg:blue fg:mauve)\
+$directory\
+[](fg:blue bg:surface0)\
+$git_branch\
+$git_status\
+[](fg:surface0 bg:surface1)\
+$nodejs\
+$python\
+$rust\
+$golang\
+[](fg:surface1)\
+$fill\
+$cmd_duration\
+$line_break\
+$character"""
+palette = "catppuccin_mocha"
+add_newline = true
+
+[palettes.catppuccin_mocha]
+rosewater = "#f5e0dc"
+flamingo = "#f2cdcd"
+pink = "#f5c2e7"
+mauve = "#cba6f7"
+red = "#f38ba8"
+peach = "#fab387"
+yellow = "#f9e2af"
+green = "#a6e3a1"
+teal = "#94e2d5"
+sky = "#89dceb"
+sapphire = "#74c7ec"
+blue = "#89b4fa"
+lavender = "#b4befe"
+text = "#cdd6f4"
+subtext0 = "#a6adc8"
+overlay0 = "#6c7086"
+surface0 = "#313244"
+surface1 = "#45475a"
+base = "#1e1e2e"
+
+[os]
+disabled = false
+style = "bg:mauve fg:base"
+
+[os.symbols]
+Linux = " "
+Macos = " "
+Windows = " "
+
+[username]
+show_always = true
+style_user = "bg:mauve fg:base bold"
+format = "[$user ]($style)"
+
+[directory]
+style = "bg:blue fg:base bold"
+format = "[ $path ]($style)"
+truncation_length = 4
+truncate_to_repo = false
+
+[git_branch]
+symbol = ""
+style = "bg:surface0 fg:lavender"
+format = "[ $symbol $branch ]($style)"
+
+[git_status]
+style = "bg:surface0 fg:peach"
+format = "[$all_status$ahead_behind ]($style)"
+
+[nodejs]
+symbol = ""
+style = "bg:surface1 fg:green"
+format = "[ $symbol $version ]($style)"
+
+[python]
+symbol = ""
+style = "bg:surface1 fg:yellow"
+format = "[ $symbol $version ]($style)"
+
+[rust]
+symbol = ""
+style = "bg:surface1 fg:peach"
+format = "[ $symbol $version ]($style)"
+
+[golang]
+symbol = ""
+style = "bg:surface1 fg:sky"
+format = "[ $symbol $version ]($style)"
+
+[cmd_duration]
+min_time = 1000
+style = "fg:overlay0"
+format = "[$duration]($style)"
+
+[fill]
+symbol = " "
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+vimcmd_symbol = "[❮](bold lavender)"
+

@@ -1,0 +1,7 @@
+# Tool versions are resolved and installed only by zsh-bootstrap. Merely
+# starting an interactive shell never invokes mise or accesses the network.
+[settings]
+auto_install = false
+not_found_auto_install = false
+experimental = false
+

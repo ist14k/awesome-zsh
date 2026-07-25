@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Awesome Zsh manual</title>
+  <style>
+    :root{color-scheme:dark;--base:#1e1e2e;--mantle:#181825;--text:#cdd6f4;
+      --sub:#a6adc8;--mauve:#cba6f7;--teal:#94e2d5;--blue:#89b4fa;
+      --surface:#313244;--red:#f38ba8}
+    *{box-sizing:border-box}body{margin:0;background:var(--base);color:var(--text);
+      font:16px/1.65 system-ui,sans-serif}main{max-width:980px;margin:auto;padding:2rem}
+    nav{background:var(--mantle);padding:1rem 2rem;position:sticky;top:0;z-index:1}
+    nav a{color:var(--blue);margin-right:1rem}h1,h2,h3{line-height:1.2;color:var(--mauve)}
+    h2{margin-top:3rem;border-bottom:1px solid var(--surface);padding-bottom:.4rem}
+    a{color:var(--teal)}code,kbd{background:var(--surface);padding:.12rem .35rem;
+      border-radius:.3rem}pre{background:var(--mantle);padding:1rem;overflow:auto;
+      border-left:.25rem solid var(--mauve)}table{width:100%;border-collapse:collapse}
+    th,td{text-align:left;vertical-align:top;padding:.55rem;border-bottom:1px solid var(--surface)}
+    .note{border-left:.25rem solid var(--teal);padding:.6rem 1rem;background:var(--mantle)}
+    .warn{border-left-color:var(--red)}dt{color:var(--teal);font-weight:700}
+    footer{margin-top:4rem;color:var(--sub)}@media(max-width:600px){main{padding:1rem}
+      nav{position:static;padding:1rem}th:nth-child(3),td:nth-child(3){display:none}}
+    @media print{nav{display:none}body{color:#111;background:#fff}pre,code,kbd{background:#eee}}
+  </style>
+</head>
+<body>
+<nav aria-label="Manual sections">
+  <a href="#start">Start</a><a href="#daily">Daily use</a>
+  <a href="#keys">Keys</a><a href="#plugins">Plugins</a>
+  <a href="#lifecycle">Updates</a><a href="#recovery">Recovery</a>
+</nav>
+<main>
+  <header>
+    <h1>Awesome Zsh</h1>
+    <p>Offline manual · version 1.0.0</p>
+    <p>Fast, pinned shell ergonomics with explicit network operations and a
+      rollback-safe installer.</p>
+  </header>
+
+  <section id="start">
+    <h2>Installation and architecture</h2>
+    <p>Verify the release checksum before running <code>install.zsh</code>.
+      For a trusted checkout, run:</p>
+    <pre><code>zsh install.zsh
+zsh install.zsh --dry-run
+zsh install.zsh --yes --no-bootstrap</code></pre>
+    <p>Options are <code>--dry-run</code>, <code>--yes</code>,
+      <code>--force</code>, <code>--no-bootstrap</code>, and
+      <code>--help</code>. The installer stages and validates a complete
+      configuration, backs up replaced files, and then commits it. It copies
+      release files; the installed configuration is not a symlink to a clone.</p>
+    <table>
+      <thead><tr><th>Location</th><th>Purpose</th><th>Typical path</th></tr></thead>
+      <tbody>
+        <tr><td><code>$ZDOTDIR/.zshenv</code>, <code>.zshrc</code></td>
+          <td>Small entry points</td><td><code>~</code></td></tr>
+        <tr><td><code>$XDG_CONFIG_HOME/zsh</code></td>
+          <td>Versioned configuration, manual, pins</td><td><code>~/.config/zsh</code></td></tr>
+        <tr><td><code>$XDG_CACHE_HOME/awesome-zsh</code></td>
+          <td>Regenerable cache</td><td><code>~/.cache/awesome-zsh</code></td></tr>
+        <tr><td><code>$XDG_DATA_HOME/awesome-zsh</code></td>
+          <td>Managed plugin/tool data</td><td><code>~/.local/share/awesome-zsh</code></td></tr>
+        <tr><td><code>$XDG_STATE_HOME/awesome-zsh</code></td>
+          <td>Backups, locks, state</td><td><code>~/.local/state/awesome-zsh</code></td></tr>
+      </tbody>
+    </table>
+    <p><code>init.zsh</code> loads focused files from <code>conf.d</code>,
+      lifecycle helpers from <code>lib</code>, pins from lock files, and finally
+      the untracked <code>local.zsh</code>. Copy
+      <code>local.zsh.example</code> to add machine-only settings.</p>
+  </section>
+
+  <section id="daily">
+    <h2>Commands, aliases, and functions</h2>
+    <dl>
+      <dt data-command="zsh-bootstrap"><code>zsh-bootstrap [--force]</code></dt>
+      <dd>Install or repair pinned optional plugins and tools. This is an
+        explicit network operation; <code>--force</code> reinstalls.</dd>
+      <dt data-command="zsh-update"><code>zsh-update [all|config|plugins|tools|rollback]</code></dt>
+      <dd>Update one managed layer, all layers, or restore the latest backup.</dd>
+      <dt data-command="zsh-doctor"><code>zsh-doctor [--benchmark]</code></dt>
+      <dd>Check paths, pins, plugin state, and executables. Benchmark mode also
+        reports startup time.</dd>
+      <dt data-command="zsh-reload"><code>zsh-reload</code></dt>
+      <dd>Replace the current interactive shell with a clean Zsh process.</dd>
+      <dt data-command="zsh-doc"><code>zsh-doc [--path|--check]</code></dt>
+      <dd>Open this file, print its path, or verify that it is readable and
+        belongs to the installed version.</dd>
+    </dl>
+    <h3>Editing experience</h3>
+    <p>Suggestions prefer shell history, then completion candidates. Accept
+      only what you want; suggestions never execute themselves. Existing paths
+      are teal and underlined, while valid path prefixes are lavender. Vi mode
+      gives command and insert editing; fzf-tab provides interactive completion.
+      Starship renders the Catppuccin prompt. Existing <code>fnm</code>
+      initialization remains responsible for Node.js selection.</p>
+    <p>Aliases and helper functions are deliberately kept in the readable
+      <code>conf.d</code> files. Entries carrying a <code># doc:</code> marker
+      are public and have a matching marker in this manual.</p>
+    <h3>Aliases</h3>
+    <table>
+      <thead><tr><th>Aliases</th><th>Purpose</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><code data-alias="..">..</code>,
+          <code data-alias="...">...</code>,
+          <code data-alias="....">....</code></td><td>Move up one, two, or
+          three directories</td><td></td></tr>
+        <tr><td><code data-alias="c">c</code></td><td>Clear the screen</td><td></td></tr>
+        <tr><td><code data-alias="ls">ls</code>,
+          <code data-alias="la">la</code>,
+          <code data-alias="ll">ll</code></td><td>Colored directory listings</td>
+          <td>Use eza automatically when available</td></tr>
+        <tr><td><code data-alias="cat">cat</code></td><td>Display a file</td>
+          <td>Defined only when bat is available</td></tr>
+        <tr><td><code data-alias="diff">diff</code>,
+          <code data-alias="grep">grep</code></td><td>Colorized output</td><td></td></tr>
+        <tr><td><code data-alias="mkdir">mkdir</code></td><td>Create parent
+          directories as needed</td><td>Adds <code>-p</code></td></tr>
+        <tr><td><code data-alias="g">g</code>, <code data-alias="ga">ga</code>,
+          <code data-alias="gb">gb</code>, <code data-alias="gc">gc</code>,
+          <code data-alias="gd">gd</code>, <code data-alias="gl">gl</code>,
+          <code data-alias="gp">gp</code>, <code data-alias="gs">gs</code></td>
+          <td>Git; add, branch, commit, diff, graph log, push, status</td><td></td></tr>
+      </tbody>
+    </table>
+    <h3>Functions</h3>
+    <dl>
+      <dt data-function="mkcd"><code>mkcd DIRECTORY</code></dt>
+      <dd>Create a directory and enter it.</dd>
+      <dt data-function="take"><code>take URL|DIRECTORY</code></dt>
+      <dd>Clone a Git URL and enter its checkout, or create and enter a local directory.</dd>
+      <dt data-function="extract"><code>extract ARCHIVE...</code></dt>
+      <dd>Extract common tar, bzip2, gzip, xz, zip, 7z, and zstd archives.</dd>
+    </dl>
+  </section>
+
+  <section id="keys">
+    <h2>Keybindings</h2>
+    <table>
+      <thead><tr><th>Key</th><th>Action</th><th>Mode</th></tr></thead>
+      <tbody>
+        <tr data-doc="key:escape"><td><kbd>Esc</kbd></td><td>Enter Vi command mode</td><td>insert</td></tr>
+        <tr data-doc="key:enter"><td><kbd>Enter</kbd></td><td>Execute the current buffer</td><td>both</td></tr>
+        <tr data-doc="key:tab"><td><kbd>Tab</kbd></td><td>Open completion/fzf-tab selection</td><td>insert</td></tr>
+        <tr data-doc="key:right"><td><kbd>→</kbd></td><td>Accept a suggestion as configured</td><td>insert</td></tr>
+        <tr data-doc="key:ctrl-r"><td><kbd>Ctrl-R</kbd></td><td>Search local
+          Atuin history when installed; otherwise incremental history search</td><td>insert/command</td></tr>
+        <tr><td><kbd>Ctrl-A</kbd> / <kbd>Ctrl-E</kbd></td><td>Beginning/end of line</td><td>insert</td></tr>
+        <tr><td><kbd>Ctrl-K</kbd> / <kbd>Ctrl-U</kbd></td><td>Kill to end/beginning of line</td><td>insert</td></tr>
+        <tr><td><kbd>Ctrl-W</kbd></td><td>Kill previous word</td><td>insert</td></tr>
+        <tr><td><kbd>↑</kbd>/<kbd>↓</kbd> or <kbd>Ctrl-P</kbd>/<kbd>Ctrl-N</kbd></td>
+          <td>Search history using the typed prefix</td><td>insert</td></tr>
+        <tr><td><kbd>/</kbd> / <kbd>?</kbd></td><td>Search history backward/forward</td><td>command</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="plugins">
+    <h2>Plugins and tools</h2>
+    <p>Plugin revisions are recorded in <code>plugins.lock</code>; tool versions
+      live in <code>versions.lock</code> and Mise lock/config files. Bootstrap
+      installs exactly these revisions under the data directory. Typical
+      components are zsh-autosuggestions, fast-syntax-highlighting, fzf-tab,
+      Starship, Atuin, fzf, Mise, and retained fnm integration.</p>
+    <p>Atuin is local-only: syncing, accounts, and remote history are disabled.
+      History and Atuin databases are runtime data and never enter an archive.</p>
+    <p class="note">Interactive startup reads local files only. It never runs
+      Curl, Git, a package manager, update checks, or any other network action.</p>
+  </section>
+
+  <section id="lifecycle">
+    <h2>Bootstrap, updates, and offline use</h2>
+    <p>The first interactive run may offer or trigger the one-time bootstrap
+      policy recorded by the installation. It uses a lock so concurrent shells
+      cannot corrupt shared state. If bootstrap is offline or interrupted, the
+      base shell still loads and the operation can be retried with
+      <code>zsh-bootstrap</code>.</p>
+    <p>Updates are manual and transactional. <code>zsh-update config</code>
+      handles release configuration, <code>plugins</code> resolves pinned plugin
+      assets, and <code>tools</code> handles pinned executables. Use
+      <code>all</code> for all three. Failed validation preserves the installed
+      version.</p>
+    <p>For permanent offline use, install with <code>--no-bootstrap</code>.
+      Completion, Vi editing, aliases, functions, this manual, and fallback
+      prompt behavior remain available; missing optional enhancements are
+      reported by <code>zsh-doctor</code>.</p>
+  </section>
+
+  <section id="recovery">
+    <h2>Recovery and rollback</h2>
+    <ol>
+      <li>Start a clean emergency shell with <code>zsh -f</code>.</li>
+      <li>Run <code>zsh-update rollback</code> if the command can be loaded.</li>
+      <li>Otherwise inspect the newest backup below
+        <code>${XDG_STATE_HOME:-$HOME/.local/state}/awesome-zsh</code> and copy
+        its files back to their original paths.</li>
+      <li>Run <code>zsh-doctor</code>, then open a new shell.</li>
+    </ol>
+    <p class="note warn">Do not delete backups until the restored shell has
+      started successfully. Installer failures should restore the pre-install
+      files automatically.</p>
+  </section>
+
+  <footer>
+    <p>Awesome Zsh v1.0.0 · bundled documentation · no network required</p>
+  </footer>
+</main>
+</body>
+</html>

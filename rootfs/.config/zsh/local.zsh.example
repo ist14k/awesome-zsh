@@ -1,0 +1,8 @@
+# Machine-local overrides belong in local.zsh (ignored by version control).
+# This file is sourced last.
+#
+# export EDITOR=nvim
+# export VISUAL=nvim
+# export FZF_DEFAULT_OPTS='--height=60% --layout=reverse --border'
+# path=("$HOME/.local/bin" $path)
+

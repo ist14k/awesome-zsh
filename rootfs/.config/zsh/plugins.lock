@@ -1,0 +1,4 @@
+# name|repository|immutable revision
+zsh-autosuggestions|https://github.com/zsh-users/zsh-autosuggestions.git|v0.7.1
+zsh-syntax-highlighting|https://github.com/zsh-users/zsh-syntax-highlighting.git|0.8.0
+fzf-tab|https://github.com/Aloxaf/fzf-tab.git|v1.2.0

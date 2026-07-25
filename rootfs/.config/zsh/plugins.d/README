@@ -1,0 +1,2 @@
+Plugins are installed into ${XDG_DATA_HOME:-$HOME/.local/share}/awesome-zsh/plugins.
+This directory is reserved for declarative, package-specific metadata.
